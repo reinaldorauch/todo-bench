@@ -1,0 +1,2 @@
+[default.databases.postgres_todo_bench]
+url = "postgres://postgres:amigen@localhost/todo-bench?schema=public"

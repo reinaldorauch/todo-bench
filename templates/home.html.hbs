@@ -1,0 +1,44 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Todos</title>
+  </head>
+  <body>
+    <H1>Todos</H1>
+    <ul>
+      {{#each todos}}
+        <li>
+          {{content}}
+          <button
+            type="button"
+            class="delete-action-btn"
+            data-id="{{id}}"
+          >Delete</button>
+        </li>
+      {{/each}}
+    </ul>
+    <button id="clear" type="button">Clear</button>
+    <form action="/todos" method="post" id="form">
+      <input type="text" name="content" autofocus />
+      <button>Save</button>
+    </form>
+    <script>
+      (function () { "use strict"; const $ = (s, c = document) =>
+      c.querySelector(s); const $$ = (s, c = document) =>
+      Array.from(c.querySelectorAll(s)); $$(".delete-action-btn").forEach((e) =>
+      { e.addEventListener("click", (evt) => { evt.preventDefault();
+      fetch(`/todos/${evt.target.dataset.id}`, { method: "DELETE" }).then( () =>
+      { window.location = "/"; } ); }); });
+      $("#form").addEventListener("submit", (evt) => { evt.preventDefault();
+      fetch("/todos", { method: "post", headers: { "Content-Type":
+      "application/json" }, body: JSON.stringify( Array.from(new
+      FormData(evt.target)).reduce((acc, [key, value]) => { acc[key] = value;
+      return acc; }, {}) ), }).then(() => { window.location = "/"; }); });
+      $("#clear").addEventListener("click", (evt) => { fetch("/todos", { method:
+      "delete" }).then(() => { window.location = "/"; }); }); })();
+
+    </script>
+  </body>
+</html>
